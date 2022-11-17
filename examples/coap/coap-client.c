@@ -43,7 +43,7 @@
 #include "contiki-net.h"
 #include "er-coap-engine.h"
 #include "dev/button-sensor.h"
-#include "sys/node-id"
+#include "sys/node-id.h"
 
 #define DEBUG 0
 #if DEBUG
@@ -71,7 +71,7 @@ uip_ipaddr_t server_ipaddr;
 static struct etimer et;
 
 /* Example URIs that can be queried. */
-#define NUMBER_OF_URLS 4
+#define NUMBER_OF_URLS 5
 /* leading and ending slashes only for demo purposes, get cropped automatically when setting the Uri-Path */
 char *service_urls[NUMBER_OF_URLS] =
 { ".well-known/core", "/actuators/toggle", "battery/", "error/in//path", "sensor/temperature" };

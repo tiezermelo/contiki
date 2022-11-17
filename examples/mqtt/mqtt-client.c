@@ -29,18 +29,18 @@
  */
 /*---------------------------------------------------------------------------*/
 #include "contiki-conf.h"
-#include "rpl/rpl-private.h"
+// #include "rpl/rpl-private.h"
 #include "mqtt.h"
-#include "net/rpl/rpl.h"
+// #include "net/rpl/rpl.h"
 #include "net/ip/uip.h"
 #include "net/ipv6/uip-icmp6.h"
 #include "net/ipv6/sicslowpan.h"
 #include "sys/etimer.h"
 #include "sys/ctimer.h"
 #include "lib/sensors.h"
-/*#include "dev/button-sensor.h"
-#include "dev/leds.h"
-#include "dev/sht25.h"*/
+// #include "dev/button-sensor.h"
+// #include "dev/leds.h"
+// #include "dev/sht25.h"
 #include <string.h>
 /*---------------------------------------------------------------------------*/
 /*
