@@ -200,7 +200,7 @@
 #define UIP_CONF_IP_FORWARD             0
 
 #ifndef UIP_CONF_BUFFER_SIZE
-#define UIP_CONF_BUFFER_SIZE            140
+#define UIP_CONF_BUFFER_SIZE            240
 #endif
 
 #define SICSLOWPAN_CONF_COMPRESSION             SICSLOWPAN_COMPRESSION_HC06
@@ -213,7 +213,7 @@
 #define UIP_CONF_IP_FORWARD                     1
 
 #ifndef UIP_CONF_BUFFER_SIZE
-#define UIP_CONF_BUFFER_SIZE                    108
+#define UIP_CONF_BUFFER_SIZE                    240
 #endif
 
 #endif /* NETSTACK_CONF_WITH_IPV6 */

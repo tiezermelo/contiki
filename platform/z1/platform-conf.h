@@ -56,6 +56,7 @@
 #define PLATFORM_HAS_BUTTON  1
 #define PLATFORM_HAS_RADIO   1
 #define PLATFORM_HAS_BATTERY 1
+#define PLATFORM_HAS_SHT25   1
 
 /* CPU target speed in Hz */
 #define F_CPU 8000000uL /* 8MHz by default */
