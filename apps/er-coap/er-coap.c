@@ -45,6 +45,8 @@
 #include "er-coap.h"
 #include "er-coap-transactions.h"
 
+#include "lib/random.h"
+
 #define DEBUG 0
 #if DEBUG
 #include <stdio.h>
@@ -285,6 +287,18 @@ coap_init_connection(uint16_t port)
 
   /* initialize transaction ID */
   current_mid = random_rand();
+}
+/*---------------------------------------------------------------------------*/
+void 
+coap_change_source_port(uint16_t node_id)
+{
+   unsigned short new_source_port = 0;
+   do {
+      new_source_port = random_rand() + node_id;
+   } while (new_source_port > 65535 && new_source_port < 1025);
+
+   udp_conn->lport= new_source_port;
+
 }
 /*---------------------------------------------------------------------------*/
 uint16_t

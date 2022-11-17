@@ -177,6 +177,7 @@ extern coap_status_t erbium_status_code;
 extern char *coap_error_message;
 
 void coap_init_connection(uint16_t port);
+void coap_change_source_port(uint16_t node_id);
 uint16_t coap_get_mid(void);
 
 void coap_init_message(void *packet, coap_message_type_t type, uint8_t code,
