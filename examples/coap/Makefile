@@ -1,4 +1,4 @@
-all: coap-server coap-client
+all: coap-server coap-client coap-black-hole coap-hello-version coap-version-number
 # use target "er-plugtest-server" explicitly when requried 
 
 CONTIKI=../..
