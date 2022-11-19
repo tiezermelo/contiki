@@ -1,7 +1,9 @@
 #!/bin/bash
 
+# CONFIGURATION STEPS
+# 1. Install git: apt-get install git
 
-# cd ~/
+# 2. Clone git repository. 
 
 # Original Contiki repository
 # git clone  https://github.com/contiki-os/contiki.git
@@ -12,8 +14,21 @@
 # Git clone by ssh
 # git clone git@github.com:tiezermelo/contiki.git
 
+# Install Contiki dependencies
+# Packages removed from command below: binutils-msp430 gcc-msp430 msp430-libc msp430mcu mspdebug
+sudo apt get install apt-get install -y build-essential gcc-arm-none-eabi gdb-arm-none-eabi openjdk-8-jdk openjdk-8-jre ant libncurses5-dev:i386 libncurses5:i386
 
-export CONTIKI_PATH=$(pwd) #'~/contiki'
+export CONTIKI_PATH=$(pwd)
+
+cat $CONTIKI_PATH/utils/msp430-gcc/msp430* > /opt/msp430-gcc-4.7.0.tar.gz
+tar -xvf /opt/msp430-gcc-4.7.0.tar.gz -C /opt/
+mv msp430-gcc-4.7.0 msp430-gcc
+
+home_path= $(echo -e $HOME)
+cat 'PATH="$PATH:/opt/msp430/bin"' >> $home_path/.profile
+source $home_path/.profile
+
+
 
 function update_mspsim_submodule(){
     git submodule update --init $CONTIKI_PATH/tools/mspsim/
@@ -96,3 +111,6 @@ for attack in ${attacks[@]}; do
     build_malicious_motes;  # ls $CONTIKI_PATH/examples/coap/ | grep z1;  ls $CONTIKI_PATH/examples/mqtt/ | grep  wismote; exit;
     restore_default_config; # cat $CONTIKI_PATH/core/net/rpl/rpl-timers.c | grep attack; exit;
 done
+
+
+exit;
