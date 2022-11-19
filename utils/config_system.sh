@@ -16,19 +16,21 @@
 
 # Install Contiki dependencies
 # Packages removed from command below: binutils-msp430 gcc-msp430 msp430-libc msp430mcu mspdebug
-sudo apt get install apt-get install -y build-essential gcc-arm-none-eabi gdb-arm-none-eabi openjdk-8-jdk openjdk-8-jre ant libncurses5-dev:i386 libncurses5:i386
+#apt get install apt-get install -y build-essential gcc-arm-none-eabi gdb-arm-none-eabi openjdk-8-jdk openjdk-8-jre ant libncurses5-dev:i386 libncurses5:i386
 
-export CONTIKI_PATH=$(pwd)
+export CONTIKI_PATH="$(echo -e $HOME)/contiki"
 
-cat $CONTIKI_PATH/utils/msp430-gcc/msp430* > /opt/msp430-gcc-4.7.0.tar.gz
-tar -xvf /opt/msp430-gcc-4.7.0.tar.gz -C /opt/
-mv msp430-gcc-4.7.0 msp430-gcc
+#cat $CONTIKI_PATH/utils/msp430-gcc/msp430* > /opt/msp430-gcc-4.7.0.tar.gz
+#tar -xvf /opt/msp430-gcc-4.7.0.tar.gz -C /opt/
+#mv msp430-gcc-4.7.0 msp430-gcc
 
-home_path= $(echo -e $HOME)
-cat 'PATH="$PATH:/opt/msp430/bin"' >> $home_path/.profile
+home_path=$(echo -e $HOME)
+#cat 'PATH="$PATH:/opt/msp430/bin"' >> $home_path/.profile
+cat >> $home_path/.profile <<EOF
+PATH="\$PATH:/opt/msp430/bin"
+EOF
+
 source $home_path/.profile
-
-
 
 function update_mspsim_submodule(){
     git submodule update --init $CONTIKI_PATH/tools/mspsim/
