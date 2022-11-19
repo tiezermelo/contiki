@@ -6,28 +6,20 @@ cd ~/
 # Original Contiki repository
 # git clone  https://github.com/contiki-os/contiki.git
 
-git clone https://github.com/tiezermelo/contiki.git
+# Git clone by https
+# git clone https://github.com/tiezermelo/contiki.git
 
-export CONTIKI_PATH='~/contiki/'
+# Git clone by ssh
+# git clone git@github.com:tiezermelo/contiki.git
 
-git submodule update --init $CONTIKI_PATH/tools/mspsim/
 
-attacks=("hello-flood" "version-number" "black-hole")
+export CONTIKI_PATH="$(pwd)/contiki" #'~/contiki'
 
-for attack in ${attacks[@]}; do
-    echo $attack 
-    create_branch()
-    backup_original_rpl_files()
-    build_rpl_border_router()
-    build_no_malicious_motes()
-    copy_files_rpl_${attack}()
-    copy_files_malicious_motes()
-    build_malicious_motes()
-    restore_default_config()
-done
+function update_mspsim_submodule(){
+    git submodule update --init $CONTIKI_PATH/tools/mspsim/
+}
 
 function create_branch() {
-    cd $CONTIKI_PATH
     git checkout -b $attack
 }
 
@@ -42,7 +34,7 @@ function copy_files_malicious_motes(){
     cp $CONTIKI_PATH/utils/malicious_motes/${attack}/mqtt-${attack}.c $CONTIKI_PATH/examples/mqtt/mqtt-${attack}.c
 }
 
-build_rpl_border_router(){
+function build_rpl_border_router(){
     cd $CONTIKI_PATH/examples/ipv6/rpl-border-router/
     make TARGET=z1 border-router
 }
@@ -56,22 +48,22 @@ function build_no_malicious_motes(){
     make TARGET=z1 coap-server
 }
 
-function copy_files_rpl_version_number() {
-    cp $CONTIKI_PATH/utils/rpl/rpl-icmp6-versionnumber.c  $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
-    cp $CONTIKI_PATH/utils/rpl/rpl-private-bkp.h          $CONTIKI_PATH/core/net/rpl/rpl-private.h
-    cp $CONTIKI_PATH/utils/rpl/rpl-timers-bkp.c           $CONTIKI_PATH/core/net/rpl/rpl-timers.c
+function copy_files_rpl_version-number() {
+    cp $CONTIKI_PATH/utils/rpl/rpl-icmp6-version-number.c  $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
+    cp $CONTIKI_PATH/utils/rpl/rpl-private-bkp.h           $CONTIKI_PATH/core/net/rpl/rpl-private.h
+    cp $CONTIKI_PATH/utils/rpl/rpl-timers-bkp.c            $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
 
-function copy_files_rpl_hello_flood() {
-    cp $CONTIKI_PATH/utils/rpl/rpl-icmp6-bkp.c          $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
-    cp $CONTIKI_PATH/utils/rpl/rpl-private-bkp.h        $CONTIKI_PATH/core/net/rpl/rpl-private.h
-    cp $CONTIKI_PATH/utils/rpl/rpl-timers-helloflood.c  $CONTIKI_PATH/core/net/rpl/rpl-timers.c
+function copy_files_rpl_hello-flood() {
+    cp $CONTIKI_PATH/core/net/rpl/rpl-icmp6-bkp.c           $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
+    cp $CONTIKI_PATH/core/net/rpl/rpl-private-bkp.h         $CONTIKI_PATH/core/net/rpl/rpl-private.h
+    cp $CONTIKI_PATH/utils/rpl/hello-flood/rpl-timers-hello-flood.c  $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
 
-function copy_files_rpl_black_hole() {
-    cp $CONTIKI_PATH/utils/rpl/rpl-icmp6-bkp.c           $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
-    cp $CONTIKI_PATH/utils/rpl/rpl-private-blackhole.h   $CONTIKI_PATH/core/net/rpl/rpl-private.h
-    cp $CONTIKI_PATH/utils/rpl/rpl-timers-blackhole.c    $CONTIKI_PATH/core/net/rpl/rpl-timers.c
+function copy_files_rpl_black-hole() {
+    cp $CONTIKI_PATH/utils/rpl/rpl-icmp6-bkp.c            $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
+    cp $CONTIKI_PATH/utils/rpl/rpl-private-black-hole.h   $CONTIKI_PATH/core/net/rpl/rpl-private.h
+    cp $CONTIKI_PATH/utils/rpl/rpl-timers-black-hole.c    $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
 
 function build_malicious_motes(){
@@ -88,11 +80,19 @@ function restore_default_config(){
     cp $CONTIKI_PATH/core/net/rpl/rpl-timers-bkp.c   $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
 
+attacks=("hello-flood" "version-number" "black-hole")
 
+for attack in ${attacks[@]}; do
+    echo $attack
+    cd $CONTIKI_PATH
 
-# function copy_files_attacks_rpl(){
-#     cp $CONTIKI_PATH/utils/rpl/master/rpl-icmp6-versionnumber.c  $CONTIKI_PATH/core/net/rpl/rpl-icmp6-versionnumber.c
-#     cp $CONTIKI_PATH/utils/rpl/master/rpl-timers-helloflood.c    $CONTIKI_PATH/core/net/rpl/rpl-timers-helloflood.c
-#     cp $CONTIKI_PATH/utils/rpl/master/rpl-timers-blackhole.c     $CONTIKI_PATH/core/net/rpl/rpl-timers-blackhole.c
-#     cp $CONTIKI_PATH/utils/rpl/master/rpl-private-blackhole.h    $CONTIKI_PATH/core/net/rpl/rpl-private-blackhole.h
-# }
+    update_mspsim_submodule 
+    create_branch; git branch; exit;
+    backup_original_rpl_files; # ls $CONTIKI_PATH/core/net/rpl/ | grep bkp; exit;
+    build_rpl_border_router;  # ls $CONTIKI_PATH/examples/ipv6/rpl-border-router/ | grep z1; exit;
+    build_no_malicious_motes; # ls $CONTIKI_PATH/examples/coap/ | grep z1;  ls $CONTIKI_PATH/examples/mqtt/ | grep  wismote; exit;
+    copy_files_rpl_$attack;  # cat $CONTIKI_PATH/core/net/rpl/rpl-timers.c | grep attack; exit;
+    copy_files_malicious_motes;  # ls $CONTIKI_PATH/examples/coap/;  ls $CONTIKI_PATH/examples/mqtt/; exit;
+    build_malicious_motes;  # ls $CONTIKI_PATH/examples/coap/ | grep z1;  ls $CONTIKI_PATH/examples/mqtt/ | grep  wismote; exit;
+    restore_default_config; # cat $CONTIKI_PATH/core/net/rpl/rpl-timers.c | grep attack; exit;
+done
