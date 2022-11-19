@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-cd ~/
+# cd ~/
 
 # Original Contiki repository
 # git clone  https://github.com/contiki-os/contiki.git
@@ -13,7 +13,7 @@ cd ~/
 # git clone git@github.com:tiezermelo/contiki.git
 
 
-export CONTIKI_PATH="$(pwd)/contiki" #'~/contiki'
+export CONTIKI_PATH=$(pwd) #'~/contiki'
 
 function update_mspsim_submodule(){
     git submodule update --init $CONTIKI_PATH/tools/mspsim/
@@ -87,7 +87,7 @@ for attack in ${attacks[@]}; do
     cd $CONTIKI_PATH
 
     update_mspsim_submodule 
-    create_branch; git branch; exit;
+    create_branch; # git branch; exit;
     backup_original_rpl_files; # ls $CONTIKI_PATH/core/net/rpl/ | grep bkp; exit;
     build_rpl_border_router;  # ls $CONTIKI_PATH/examples/ipv6/rpl-border-router/ | grep z1; exit;
     build_no_malicious_motes; # ls $CONTIKI_PATH/examples/coap/ | grep z1;  ls $CONTIKI_PATH/examples/mqtt/ | grep  wismote; exit;
