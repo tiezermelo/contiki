@@ -62,7 +62,7 @@
       <description>malicious</description>
       <source EXPORT="discard">[CONTIKI_DIR]/examples/z1/mqtt-demo/hello-flood.c</source>
       <commands EXPORT="discard">make hello-flood.wismote TARGET=wismote</commands>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/z1/mqtt-demo/hello-flood.wismote</firmware>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/mqtt/mqtt-hello-flood.wismote</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>

@@ -42,7 +42,7 @@
       org.contikios.cooja.mspmote.Z1MoteType
       <identifier>z12</identifier>
       <description>COAP-SERVER</description>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/er-rest-example/er-example-server.z1</firmware>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/coap/coap-server.z1</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
@@ -60,7 +60,7 @@
       org.contikios.cooja.mspmote.Z1MoteType
       <identifier>z13</identifier>
       <description>COAP-CLIENT</description>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/er-rest-example/coap.z1</firmware>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/coap/coap-client.z1</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
@@ -78,7 +78,7 @@
       org.contikios.cooja.mspmote.Z1MoteType
       <identifier>z14</identifier>
       <description>MALICIOUS</description>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/er-rest-example/version-number.z1</firmware>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/coap/coap-version-number.z1</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>

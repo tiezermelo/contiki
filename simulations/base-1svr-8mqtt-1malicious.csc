@@ -42,7 +42,7 @@
       org.contikios.cooja.mspmote.WismoteMoteType
       <identifier>wismote1</identifier>
       <description>MQTT-CLIENT</description>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/z1/mqtt-demo/mqtt-client.wismote</firmware>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/mqtt/mqtt-client.wismote</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
@@ -60,7 +60,7 @@
       org.contikios.cooja.mspmote.WismoteMoteType
       <identifier>wismote2</identifier>
       <description>MALICIOUS</description>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/z1/mqtt-demo/black-hole.wismote</firmware>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/mqtt/mqtt-black-hole.wismote</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>

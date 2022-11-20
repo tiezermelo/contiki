@@ -44,7 +44,7 @@
       <description>COAP-SERVER</description>
       <source EXPORT="discard">[CONTIKI_DIR]/examples/er-rest-example/er-example-server.c</source>
       <commands EXPORT="discard">make er-example-server.z1 TARGET=z1</commands>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/er-rest-example/er-example-server.z1</firmware>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/coap/coap-server.z1</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
@@ -62,7 +62,7 @@
       org.contikios.cooja.mspmote.Z1MoteType
       <identifier>z13</identifier>
       <description>COAP-CLIENT</description>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/er-rest-example/coap.z1</firmware>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/coap/coap-client.z1</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
@@ -82,7 +82,7 @@
       <description>MALICIOUS</description>
       <source EXPORT="discard">[CONTIKI_DIR]/examples/er-rest-example/hello-flood.c</source>
       <commands EXPORT="discard">make hello-flood.z1 TARGET=z1</commands>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/er-rest-example/hello-flood.z1</firmware>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/coap/coap-hello-flood.z1</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
