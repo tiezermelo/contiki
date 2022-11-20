@@ -15,22 +15,17 @@
 # git clone git@github.com:tiezermelo/contiki.git
 
 # Install Contiki dependencies
-# Packages removed from command below: binutils-msp430 gcc-msp430 msp430-libc msp430mcu mspdebug
-#apt get install apt-get install -y build-essential gcc-arm-none-eabi gdb-arm-none-eabi openjdk-8-jdk openjdk-8-jre ant libncurses5-dev:i386 libncurses5:i386
+# Packages removed from command below:  gdb-arm-none-eabi binutils-msp430 gcc-msp430 msp430-libc msp430mcu mspdebu
 
 export CONTIKI_PATH="$(echo -e $HOME)/contiki"
 
-#cat $CONTIKI_PATH/utils/msp430-gcc/msp430* > /opt/msp430-gcc-4.7.0.tar.gz
-#tar -xvf /opt/msp430-gcc-4.7.0.tar.gz -C /opt/
-#mv msp430-gcc-4.7.0 msp430-gcc
 
 home_path=$(echo -e $HOME)
-#cat 'PATH="$PATH:/opt/msp430/bin"' >> $home_path/.profile
 cat >> $home_path/.profile <<EOF
-PATH="\$PATH:/opt/msp430/bin"
+PATH="\$PATH:/opt/msp430-gcc/bin"
 EOF
 
-source $home_path/.profile
+#source $home_path/.profile
 
 function update_mspsim_submodule(){
     git submodule update --init $CONTIKI_PATH/tools/mspsim/
@@ -66,9 +61,9 @@ function build_no_malicious_motes(){
 }
 
 function copy_files_rpl_version-number() {
-    cp $CONTIKI_PATH/utils/rpl/rpl-icmp6-version-number.c  $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
-    cp $CONTIKI_PATH/utils/rpl/rpl-private-bkp.h           $CONTIKI_PATH/core/net/rpl/rpl-private.h
-    cp $CONTIKI_PATH/utils/rpl/rpl-timers-bkp.c            $CONTIKI_PATH/core/net/rpl/rpl-timers.c
+    cp $CONTIKI_PATH/utils/rpl/version-number/rpl-icmp6-version-number.c  $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
+    cp $CONTIKI_PATH/core/net/rpl/rpl-private-bkp.h           $CONTIKI_PATH/core/net/rpl/rpl-private.h
+    cp $CONTIKI_PATH/core/net/rpl/rpl-timers-bkp.c            $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
 
 function copy_files_rpl_hello-flood() {
@@ -78,9 +73,9 @@ function copy_files_rpl_hello-flood() {
 }
 
 function copy_files_rpl_black-hole() {
-    cp $CONTIKI_PATH/utils/rpl/rpl-icmp6-bkp.c            $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
-    cp $CONTIKI_PATH/utils/rpl/rpl-private-black-hole.h   $CONTIKI_PATH/core/net/rpl/rpl-private.h
-    cp $CONTIKI_PATH/utils/rpl/rpl-timers-black-hole.c    $CONTIKI_PATH/core/net/rpl/rpl-timers.c
+    cp $CONTIKI_PATH/core/net/rpl/rpl-icmp6-bkp.c            $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
+    cp $CONTIKI_PATH/utils/rpl/black-hole/rpl-private-black-hole.h   $CONTIKI_PATH/core/net/rpl/rpl-private.h
+    cp $CONTIKI_PATH/utils/rpl/black-hole/rpl-timers-black-hole.c    $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
 
 function build_malicious_motes(){
@@ -100,7 +95,7 @@ function restore_default_config(){
 attacks=("hello-flood" "version-number" "black-hole")
 
 for attack in ${attacks[@]}; do
-    echo $attack
+    echo -e "Configuring the attack $attack\n"
     cd $CONTIKI_PATH
 
     update_mspsim_submodule 
