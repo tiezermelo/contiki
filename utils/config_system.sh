@@ -1,4 +1,6 @@
 #!/bin/bash
+BLUE='\033[1;34m'
+NC='\033[0m' # No Color
 
 # CONFIGURATION STEPS
 # 1. Install git: apt-get install git
@@ -17,15 +19,6 @@
 # Install Contiki dependencies
 # Packages removed from command below:  gdb-arm-none-eabi binutils-msp430 gcc-msp430 msp430-libc msp430mcu mspdebu
 
-export CONTIKI_PATH="$(echo -e $HOME)/contiki"
-
-
-home_path=$(echo -e $HOME)
-cat >> $home_path/.profile <<EOF
-PATH="\$PATH:/opt/msp430-gcc/bin"
-EOF
-
-#source $home_path/.profile
 
 function update_mspsim_submodule(){
     git submodule update --init $CONTIKI_PATH/tools/mspsim/
@@ -92,10 +85,35 @@ function restore_default_config(){
     cp $CONTIKI_PATH/core/net/rpl/rpl-timers-bkp.c   $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
 
+function build_master_environment(){
+    cd $CONTIKI_PATH
+    git checkout master
+    build_no_malicious_motes
+    build_rpl_border_router
+}
+
+
+
+# Starting configuration
+
+echo -e "${BLUE}\nStarting configuration${NC}"
+export CONTIKI_PATH="$(echo -e $HOME)/contiki"
+
+
+home_path=$(echo -e $HOME)
+cat >> $home_path/.profile <<EOF
+PATH="\$PATH:/opt/msp430-gcc/bin"
+EOF
+
+source $home_path/.profile
+
+echo -e "${BLUE}\n\nConfiguring master environment ${NC}"
+build_master_environment
+
 attacks=("hello-flood" "version-number" "black-hole")
 
 for attack in ${attacks[@]}; do
-    echo -e "Configuring the attack $attack\n"
+    echo -e "${BLUE}\n\nConfiguring $attack attack environment ${NC}"
     cd $CONTIKI_PATH
 
     update_mspsim_submodule 
