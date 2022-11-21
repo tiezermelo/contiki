@@ -88,6 +88,8 @@ function restore_default_config(){
 function build_master_environment(){
     cd $CONTIKI_PATH
     git checkout master
+    
+    update_mspsim_submodule 
     build_no_malicious_motes
     build_rpl_border_router
 }
@@ -116,16 +118,14 @@ for attack in ${attacks[@]}; do
     echo -e "${BLUE}\n\nConfiguring $attack attack environment ${NC}"
     cd $CONTIKI_PATH
 
-    update_mspsim_submodule 
-    create_branch; # git branch; exit;
-    backup_original_rpl_files; # ls $CONTIKI_PATH/core/net/rpl/ | grep bkp; exit;
-    build_rpl_border_router;  # ls $CONTIKI_PATH/examples/ipv6/rpl-border-router/ | grep z1; exit;
-    build_no_malicious_motes; # ls $CONTIKI_PATH/examples/coap/ | grep z1;  ls $CONTIKI_PATH/examples/mqtt/ | grep  wismote; exit;
-    copy_files_rpl_$attack;  # cat $CONTIKI_PATH/core/net/rpl/rpl-timers.c | grep attack; exit;
-    copy_files_malicious_motes;  # ls $CONTIKI_PATH/examples/coap/;  ls $CONTIKI_PATH/examples/mqtt/; exit;
-    build_malicious_motes;  # ls $CONTIKI_PATH/examples/coap/ | grep z1;  ls $CONTIKI_PATH/examples/mqtt/ | grep  wismote; exit;
-    restore_default_config; # cat $CONTIKI_PATH/core/net/rpl/rpl-timers.c | grep attack; exit;
+    create_branch; 
+    backup_original_rpl_files; 
+    copy_files_rpl_$attack;  
+    copy_files_malicious_motes;  
+    build_malicious_motes;  
+    restore_default_config; 
 done
 
-
+cd $CONTIKI_PATH
+git checkout master
 exit;
