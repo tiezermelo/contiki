@@ -102,12 +102,12 @@ echo -e "${BLUE}\nStarting configuration${NC}"
 export CONTIKI_PATH="$(echo -e $HOME)/contiki"
 
 
-home_path=$(echo -e $HOME)
-cat >> $home_path/.profile <<EOF
+#home_path=$(echo -e $HOME)
+cat >> $(echo -e $HOME)/.profile <<EOF
 PATH="\$PATH:/opt/msp430-gcc/bin"
 EOF
 
-source $home_path/.profile
+source $(echo -e $HOME)/.profile  # $home_path/.profile
 
 echo -e "${BLUE}\n\nConfiguring master environment ${NC}"
 build_master_environment
