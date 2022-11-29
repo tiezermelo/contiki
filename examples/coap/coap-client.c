@@ -42,8 +42,8 @@
 #include "contiki.h"
 #include "contiki-net.h"
 #include "er-coap-engine.h"
-#include "dev/button-sensor.h"
 #include "sys/node-id.h"
+#include "lib/random.h"
 
 #define DEBUG 0
 #if DEBUG
@@ -59,25 +59,21 @@
 
 #define SERVER_NODE(ipaddr)   uip_ip6addr(ipaddr, 0xfe80, 0, 0, 0, 0xc30c, 0x0, 0x0, 0x0002)
 
-#define LOCAL_PORT      UIP_HTONS(COAP_DEFAULT_PORT + 1)
 #define REMOTE_PORT     UIP_HTONS(COAP_DEFAULT_PORT)
 
 #define TOGGLE_INTERVAL 10
 
-PROCESS(er_example_client, "Erbium Example Client");
-AUTOSTART_PROCESSES(&er_example_client);
+PROCESS(coap_client, "Coap Client");
+AUTOSTART_PROCESSES(&coap_client);
 
 uip_ipaddr_t server_ipaddr;
 static struct etimer et;
 
 /* Example URIs that can be queried. */
-#define NUMBER_OF_URLS 5
+#define NUMBER_OF_URLS 4
 /* leading and ending slashes only for demo purposes, get cropped automatically when setting the Uri-Path */
 char *service_urls[NUMBER_OF_URLS] =
-{ ".well-known/core", "/actuators/toggle", "battery/", "error/in//path", "sensor/temperature" };
-#if PLATFORM_HAS_BUTTON
-static int uri_switch = 0;
-#endif
+{ ".well-known/core","sensors/temperature","/actuators/toggle", "error/in//path" };
 
 #if PLATFORM_HAS_SHT25
 #include "dev/sht25.h"
@@ -93,7 +89,7 @@ client_chunk_handler(void *response)
 
   printf("|%.*s", len, (char *)chunk);
 }
-PROCESS_THREAD(er_example_client, ev, data)
+PROCESS_THREAD(coap_client, ev, data)
 {
   PROCESS_BEGIN();
 
@@ -105,11 +101,6 @@ PROCESS_THREAD(er_example_client, ev, data)
   coap_init_engine();
 
   etimer_set(&et, TOGGLE_INTERVAL * CLOCK_SECOND);
-
-#if PLATFORM_HAS_BUTTON
-  SENSORS_ACTIVATE(button_sensor);
-  printf("Press a button to request %s\n", service_urls[uri_switch]);
-#endif
 
 #if PLATFORM_HAS_SHT25
 SENSORS_ACTIVATE(sht25);
@@ -125,9 +116,9 @@ SENSORS_ACTIVATE(sht25);
       coap_init_message(request, COAP_TYPE_CON, COAP_POST, 0);
       coap_set_header_uri_path(request, service_urls[1]);
       
-      //printf("Temperature - Humidity: %uC - %u\n", sht25.value(SHT25_VAL_TEMP), sht25.value(SHT25_VAL_HUM));
 
-      const char msg[] = "Toggle!";
+      char msg[] = {'T','e','m','p','e','r','a','t','u','r','e',':',' ','2','2','.','4',(random_rand() % 10)+'0','C','\0'};
+      printf("\nMessage: %s\n", msg);
       
       coap_set_payload(request, (uint8_t *)msg, sizeof(msg) - 1);
 
@@ -142,28 +133,7 @@ SENSORS_ACTIVATE(sht25);
       printf("\n--Done--\n");
 
       etimer_reset(&et);
-
-#if PLATFORM_HAS_BUTTON
-    } else if(ev == sensors_event && data == &button_sensor) {
-
-      /* send a request to notify the end of the process */
-
-      coap_init_message(request, COAP_TYPE_CON, COAP_GET, 0);
-      coap_set_header_uri_path(request, service_urls[uri_switch]);
-
-      printf("--Requesting %s--\n", service_urls[uri_switch]);
-
-      PRINT6ADDR(&server_ipaddr);
-      PRINTF(" : %u\n", UIP_HTONS(REMOTE_PORT));
-
-      COAP_BLOCKING_REQUEST(&server_ipaddr, REMOTE_PORT, request,
-                            client_chunk_handler);
-
-      printf("\n--Done--\n");
-
-      uri_switch = (uri_switch + 1) % NUMBER_OF_URLS;
-#endif
-    }
+    } 
   }
 
   PROCESS_END();

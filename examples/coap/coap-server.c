@@ -87,6 +87,10 @@ extern resource_t res_battery;
 #include "dev/temperature-sensor.h"
 extern resource_t res_temperature;
 #endif
+// #if PLATFORM_HAS_SHT25
+// #include "dev/sht25.h"
+// extern resource_t res_sht25;
+// #endif
 /*
 extern resource_t res_battery;
 #endif
@@ -131,30 +135,36 @@ PROCESS_THREAD(er_example_server, ev, data)
    * WARNING: Activating twice only means alternate path, not two instances!
    * All static variables are the same for each URI path.
    */
-  rest_activate_resource(&res_hello, "test/hello");
+  // rest_activate_resource(&res_hello, "test/hello");
 /*  rest_activate_resource(&res_mirror, "debug/mirror"); */
 /*  rest_activate_resource(&res_chunks, "test/chunks"); */
 /*  rest_activate_resource(&res_separate, "test/separate"); */
-  rest_activate_resource(&res_push, "test/push");
+  // rest_activate_resource(&res_push, "test/push");
 /*  rest_activate_resource(&res_event, "sensors/button"); */
 /*  rest_activate_resource(&res_sub, "test/sub"); */
 /*  rest_activate_resource(&res_b1_sep_b2, "test/b1sepb2"); */
-#if PLATFORM_HAS_LEDS
-/*  rest_activate_resource(&res_leds, "actuators/leds"); */
-  rest_activate_resource(&res_toggle, "actuators/toggle");
+
+#if PLATFORM_HAS_SHT25 // #if PLATFORM_HAS_LEDS
+  // rest_activate_resource(&res_toggle, "actuators/toggle");
+  rest_activate_resource(&res_toggle, "sensors/temperature");
 #endif
-#if PLATFORM_HAS_LIGHT
-  rest_activate_resource(&res_light, "sensors/light"); 
-  SENSORS_ACTIVATE(light_sensor);  
-#endif
-#if PLATFORM_HAS_BATTERY
-  rest_activate_resource(&res_battery, "sensors/battery");  
-  SENSORS_ACTIVATE(battery_sensor);  
-#endif
-#if PLATFORM_HAS_TEMPERATURE
-  rest_activate_resource(&res_temperature, "sensors/temperature");  
-  SENSORS_ACTIVATE(temperature_sensor);  
-#endif
+// #if PLATFORM_HAS_LIGHT
+//   rest_activate_resource(&res_light, "sensors/light"); 
+//   SENSORS_ACTIVATE(light_sensor);  
+// #endif
+// #if PLATFORM_HAS_BATTERY
+//   rest_activate_resource(&res_battery, "sensors/battery");  
+//   SENSORS_ACTIVATE(battery_sensor);  
+// #endif
+// #if PLATFORM_HAS_TEMPERATURE
+//   rest_activate_resource(&res_temperature, "sensors/temperature2");  
+//   SENSORS_ACTIVATE(temperature_sensor);  
+// #endif
+// #if PLATFORM_HAS_SHT25
+//   rest_activate_resource(&res_sht25, "sensors/temperature");
+//   // rest_activate_resource(&res_sht25, "sensors/rel-humidity"); 
+//   SENSORS_ACTIVATE(sht25); 
+// #endif
 /*
 #if PLATFORM_HAS_RADIO
   rest_activate_resource(&res_radio, "sensors/radio");  
