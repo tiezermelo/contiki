@@ -1,5 +1,5 @@
-# # Install Contiki dependencies
-# # Packages removed from command below:  gdb-arm-none-eabi binutils-msp430 gcc-msp430 msp430-libc msp430mcu mspdebu
+# Install Contiki dependencies
+# Packages removed from command below:  gdb-arm-none-eabi binutils-msp430 gcc-msp430 msp430-libc msp430mcu mspdebu
 apt-get install -y build-essential gcc-arm-none-eabi openjdk-8-jdk openjdk-8-jre ant libncurses5-dev:i386 libncurses5:i386 zlib1g:i386 net-tools 
 
 DEBIAN_FRONTEND=noninteractive apt-get -y -q install wireshark
@@ -13,6 +13,7 @@ mv /opt/msp430-gcc-4.7.0 /opt/msp430-gcc
 chmod 770 /opt/msp430-gcc
 rm /opt/msp430-gcc-4.7.0.tar.gz
 
-# update default java version to java8 
-update-java-alternatives -s ${update-java-alternatives -l | grep java-1.8 | cut -d " " -f1 }
+# update default java version to java8
+# exp=$(update-java-alternatives -l | cut -d ' ' -f1 | grep java-1.8 )
+# update-java-alternatives -s $(echo -e $exp)
 
