@@ -113,19 +113,18 @@ echo -e "${BLUE}\nStarting configuration${NC}"
 export CONTIKI_PATH="$(echo -e $HOME)/contiki"
 
 
-#home_path=$(echo -e $HOME)
-# cat >> $(echo -e $HOME)/.profile <<EOF
-# PATH="\$PATH:/opt/msp430-gcc/bin"
-# EOF
+home_path=$(echo -e $HOME)
+cat >> $(echo -e $HOME)/.profile <<EOF
+PATH="\$PATH:/opt/msp430-gcc/bin"
+EOF
 
-# source $HOME/.profile
+source $HOME/.profile
 
 echo -e "${BLUE}\n\nConfiguring master environment ${NC}"
 build_master_environment
 
 # attacks=("hello-flood" "version-number" "black-hole")
 
-attacks=("hello-flood")
 for attack in ${attacks[@]}; do
     echo -e "${BLUE}\n\nConfiguring $attack attack environment ${NC}"
     cd $CONTIKI_PATH
@@ -143,7 +142,12 @@ for attack in ${attacks[@]}; do
     build_malicious_motes;
 
     echo -e "${RED}\nRestore original RPL configuration${NC}"  
-    restore_default_config; 
+    restore_default_config;
+
+    cd $CONTIKI_PATH
+    git add -f examples/coap/coap-${attack}.* examples/mqtt/mqtt-${attack}.* utils/rpl/original_rpl_files
+    git commit -m "Configured $attack attack environment"
+
 done
 
 echo -e "${BLUE}\n\nSwitch to master branch${NC}"
