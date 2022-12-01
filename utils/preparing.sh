@@ -16,4 +16,6 @@ rm /opt/msp430-gcc-4.7.0.tar.gz
 # update default java version to java8
 # exp=$(update-java-alternatives -l | cut -d ' ' -f1 | grep java-1.8 )
 # update-java-alternatives -s $(echo -e $exp)
+echo -e $(echo -e '0' | sudo update-alternatives --config java | grep java-8 | cut -c 3) | sudo update-alternatives --config java
 
+java -version
