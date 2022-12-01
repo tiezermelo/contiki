@@ -1,5 +1,6 @@
 #!/bin/bash
 BLUE='\033[1;34m'
+RED='\033[1;31m'
 NC='\033[0m' # No Color
 
 # CONFIGURATION STEPS
@@ -29,9 +30,9 @@ function create_branch() {
 }
 
 function backup_original_rpl_files(){
-    cp $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c    $CONTIKI_PATH/core/net/rpl/rpl-icmp6-bkp.c
-    cp $CONTIKI_PATH/core/net/rpl/rpl-private.h  $CONTIKI_PATH/core/net/rpl/rpl-private-bkp.h
-    cp $CONTIKI_PATH/core/net/rpl/rpl-timers.c   $CONTIKI_PATH/core/net/rpl/rpl-timers-bkp.c
+    cp $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c    $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-icmp6-bkp.c
+    cp $CONTIKI_PATH/core/net/rpl/rpl-private.h  $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-private-bkp.h
+    cp $CONTIKI_PATH/core/net/rpl/rpl-timers.c   $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-timers-bkp.c
 }
 
 function copy_files_malicious_motes(){
@@ -54,19 +55,19 @@ function build_no_malicious_motes(){
 }
 
 function copy_files_rpl_version-number() {
-    cp $CONTIKI_PATH/utils/rpl/version-number/rpl-icmp6-version-number.c  $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
-    cp $CONTIKI_PATH/core/net/rpl/rpl-private-bkp.h           $CONTIKI_PATH/core/net/rpl/rpl-private.h
-    cp $CONTIKI_PATH/core/net/rpl/rpl-timers-bkp.c            $CONTIKI_PATH/core/net/rpl/rpl-timers.c
+    cp $CONTIKI_PATH/utils/rpl/version-number/rpl-icmp6-version-number.c    $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
+    cp $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-private-bkp.h         $CONTIKI_PATH/core/net/rpl/rpl-private.h
+    cp $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-timers-bkp.c          $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
 
 function copy_files_rpl_hello-flood() {
-    cp $CONTIKI_PATH/core/net/rpl/rpl-icmp6-bkp.c           $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
-    cp $CONTIKI_PATH/core/net/rpl/rpl-private-bkp.h         $CONTIKI_PATH/core/net/rpl/rpl-private.h
+    cp $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-icmp6-bkp.c    $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
+    cp $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-private-bkp.h  $CONTIKI_PATH/core/net/rpl/rpl-private.h
     cp $CONTIKI_PATH/utils/rpl/hello-flood/rpl-timers-hello-flood.c  $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
 
 function copy_files_rpl_black-hole() {
-    cp $CONTIKI_PATH/core/net/rpl/rpl-icmp6-bkp.c            $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
+    cp $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-icmp6-bkp.c    $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
     cp $CONTIKI_PATH/utils/rpl/black-hole/rpl-private-black-hole.h   $CONTIKI_PATH/core/net/rpl/rpl-private.h
     cp $CONTIKI_PATH/utils/rpl/black-hole/rpl-timers-black-hole.c    $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
@@ -80,18 +81,28 @@ function build_malicious_motes(){
 }
 
 function restore_default_config(){
-    cp $CONTIKI_PATH/core/net/rpl/rpl-icmp6-bkp.c    $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
-    cp $CONTIKI_PATH/core/net/rpl/rpl-private-bkp.h  $CONTIKI_PATH/core/net/rpl/rpl-private.h
-    cp $CONTIKI_PATH/core/net/rpl/rpl-timers-bkp.c   $CONTIKI_PATH/core/net/rpl/rpl-timers.c
+    cp $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-icmp6-bkp.c    $CONTIKI_PATH/core/net/rpl/rpl-icmp6.c
+    cp $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-private-bkp.h  $CONTIKI_PATH/core/net/rpl/rpl-private.h
+    cp $CONTIKI_PATH/utils/rpl/original_rpl_files/rpl-timers-bkp.c   $CONTIKI_PATH/core/net/rpl/rpl-timers.c
 }
 
 function build_master_environment(){
     cd $CONTIKI_PATH
     git checkout master
+
+    echo -e "${RED}\nBackup original RPL files${NC}"
+    mkdir -p $CONTIKI_PATH/utils/rpl/original_rpl_files
+    backup_original_rpl_files;
     
-    update_mspsim_submodule 
+    echo -e "${RED}\nUpdate mspsim submodule${NC}"
+    update_mspsim_submodule
+
+    echo -e "${RED}\nBuild coap and mqtt motes (no malicious)${NC}"
     build_no_malicious_motes
+
+    echo -e "${RED}\nBuild RPL border router${NC}"
     build_rpl_border_router
+
 }
 
 
@@ -103,29 +114,39 @@ export CONTIKI_PATH="$(echo -e $HOME)/contiki"
 
 
 #home_path=$(echo -e $HOME)
-cat >> $(echo -e $HOME)/.profile <<EOF
-PATH="\$PATH:/opt/msp430-gcc/bin"
-EOF
+# cat >> $(echo -e $HOME)/.profile <<EOF
+# PATH="\$PATH:/opt/msp430-gcc/bin"
+# EOF
 
-source $(echo -e $HOME)/.profile  # $home_path/.profile
+# source $HOME/.profile
 
 echo -e "${BLUE}\n\nConfiguring master environment ${NC}"
 build_master_environment
 
-attacks=("hello-flood" "version-number" "black-hole")
+# attacks=("hello-flood" "version-number" "black-hole")
 
+attacks=("hello-flood")
 for attack in ${attacks[@]}; do
     echo -e "${BLUE}\n\nConfiguring $attack attack environment ${NC}"
     cd $CONTIKI_PATH
 
-    create_branch; 
-    backup_original_rpl_files; 
-    copy_files_rpl_$attack;  
-    copy_files_malicious_motes;  
-    build_malicious_motes;  
+    echo -e "${RED}\nCreate $attack branch${NC}"
+    create_branch;
+    
+    echo -e "${RED}\nCopy malicious RPL files${NC}"
+    copy_files_rpl_$attack;
+
+    echo -e "${RED}\nCopy malicious mote files${NC}"
+    copy_files_malicious_motes;
+
+    echo -e "${RED}\nBuild malicious motes${NC}"
+    build_malicious_motes;
+
+    echo -e "${RED}\nRestore original RPL configuration${NC}"  
     restore_default_config; 
 done
 
+echo -e "${BLUE}\n\nSwitch to master branch${NC}"
 cd $CONTIKI_PATH
 git checkout master
 exit;
