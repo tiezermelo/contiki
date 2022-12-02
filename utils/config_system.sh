@@ -113,12 +113,22 @@ echo -e "${BLUE}\nStarting configuration${NC}"
 export CONTIKI_PATH="$(echo -e $HOME)/contiki"
 
 
-home_path=$(echo -e $HOME)
-cat >> $(echo -e $HOME)/.profile <<EOF
+if ! grep -wq 'PATH:/opt/msp430-gcc/bin' $HOME/.profile 
+then
+
+cat >>  $HOME/.profile <<EOF
+\# Add msp43-gcc to path (contiki dependency)
 PATH="\$PATH:/opt/msp430-gcc/bin"
 EOF
 
 source $HOME/.profile
+echo -e "${RED}\nAdding msp430-gcc to $PATH\n${NC}"
+
+else
+echo -e "${RED}\nMSP430-gcc already added to $PATH\n{NC}"
+
+fi
+
 
 echo -e "${BLUE}\n\nConfiguring master environment ${NC}"
 build_master_environment
