@@ -14,7 +14,9 @@ chmod 770 /opt/msp430-gcc
 rm /opt/msp430-gcc-4.7.0.tar.gz
 
 # update default java version to java8
-tmp=$(echo $(echo -e '0' | sudo update-alternatives --config java | grep java-8 | cut -c 3))
-echo -e "$tmp\n" | sudo update-alternatives --config java
+#tmp=$(echo $(echo -e '0' | update-alternatives --config java | grep java-8 | cut -c 3))
+tmp=$(echo '0' | update-alternatives --config java | grep java-8 | cut -c3)
+echo "$tmp\n" | update-alternatives --config java
+
 java -version
 
