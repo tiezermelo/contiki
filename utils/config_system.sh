@@ -117,15 +117,15 @@ if ! grep -wq 'PATH:/opt/msp430-gcc/bin' $HOME/.profile
 then
 
 cat >>  $HOME/.profile <<EOF
-\# Add msp43-gcc to path (contiki dependency)
+# Add msp43-gcc to path (contiki dependency)
 PATH="\$PATH:/opt/msp430-gcc/bin"
 EOF
 
 source $HOME/.profile
-echo -e "${RED}\nAdding msp430-gcc to $PATH\n${NC}"
+echo -e "${RED}\nAdding msp430-gcc to PATH\n${NC}"
 
 else
-echo -e "${RED}\nMSP430-gcc already added to $PATH\n{NC}"
+echo -e "${RED}\nMSP430-gcc already added to PATH\n{NC}"
 
 fi
 
@@ -133,7 +133,7 @@ fi
 echo -e "${BLUE}\n\nConfiguring master environment ${NC}"
 build_master_environment
 
-# attacks=("hello-flood" "version-number" "black-hole")
+attacks=("hello-flood" "version-number" "black-hole")
 
 for attack in ${attacks[@]}; do
     echo -e "${BLUE}\n\nConfiguring $attack attack environment ${NC}"
