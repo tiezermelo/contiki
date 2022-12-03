@@ -1,6 +1,6 @@
 # Install Contiki dependencies
 # Packages removed from command below:  gdb-arm-none-eabi binutils-msp430 gcc-msp430 msp430-libc msp430mcu mspdebu
-apt-get install -y build-essential gcc-arm-none-eabi openjdk-8-jdk openjdk-8-jre ant libncurses5-dev:i386 libncurses5:i386 zlib1g:i386 net-tools 
+apt-get install -y build-essential gcc-arm-none-eabi openjdk-8-jdk openjdk-8-jre ant libncurses5-dev:i386 libncurses5:i386 zlib1g:i386 net-tools mosquitto mosquitto-clients
 
 DEBIAN_FRONTEND=noninteractive apt-get -y -q install wireshark
 
@@ -19,4 +19,3 @@ tmp=$(echo '0' | update-alternatives --config java | grep java-8 | cut -c3)
 echo "$tmp\n" | update-alternatives --config java
 
 java -version
-
