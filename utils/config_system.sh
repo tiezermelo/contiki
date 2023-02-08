@@ -165,6 +165,10 @@ fi
 echo -e "${BLUE}\n\nConfiguring master environment ${NC}"
 build_master_environment
 
+git config --global user.name "$1"
+git config --global user.email "$2"
+
+
 attacks=("hello-flood" "version-number" "black-hole")
 
 for attack in ${attacks[@]}; do
