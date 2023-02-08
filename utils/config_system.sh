@@ -2,6 +2,7 @@
 BLUE='\033[1;34m'
 RED='\033[1;31m'
 NC='\033[0m' # No Color
+YELLOW='\033[0;33m'
 
 # CONFIGURATION STEPS
 # 1. Install git: apt-get install git
@@ -27,6 +28,9 @@ function update_mspsim_submodule(){
 
 function create_branch() {
     git checkout -b $attack
+    echo -e "${YELLOW}\n\nCurrent branch: \n"
+    git branch
+    echo -e "${NC}\n"
 }
 
 function backup_original_rpl_files(){
@@ -122,6 +126,9 @@ function build_master_environment(){
     cd $CONTIKI_PATH
     git checkout master
 
+    git config --global user.name $1
+    git config --global user.email $2
+
     echo -e "${RED}\nBackup original RPL files${NC}"
     mkdir -p $CONTIKI_PATH/utils/rpl/original_rpl_files
     backup_original_rpl_files;
@@ -135,6 +142,9 @@ function build_master_environment(){
     echo -e "${RED}\nBuild RPL border router${NC}"
     build_rpl_border_router
 
+    cd $CONTIKI_PATH
+    git add -f examples/coap/ examples/mqtt/ utils/rpl/original_rpl_files
+    git commit -m "Master branch configured"
 }
 
 
@@ -164,16 +174,13 @@ fi
 
 echo -e "${BLUE}\n\nConfiguring master environment ${NC}"
 build_master_environment
-
-git config --global user.name "$1"
-git config --global user.email "$2"
-
-
+exit;
 attacks=("hello-flood" "version-number" "black-hole")
 
 for attack in ${attacks[@]}; do
     echo -e "${BLUE}\n\nConfiguring $attack attack environment ${NC}"
     cd $CONTIKI_PATH
+    git checkout master
 
     echo -e "${RED}\nCreate $attack branch${NC}"
     create_branch;
@@ -195,6 +202,10 @@ for attack in ${attacks[@]}; do
     git add -f examples/coap/coap-${attack}.* examples/mqtt/mqtt-${attack}.* utils/rpl/original_rpl_files
     git commit -m "Configured $attack attack environment"
 
+    echo -e "${YELLOW}\n\nFiles in coap directory: \n"
+    ls $CONTIKI_PATH/examples/coap/
+    echo -e "${NC}\n"
+    
 done
 
 echo -e "${BLUE}\n\nSwitch to master branch${NC}"
