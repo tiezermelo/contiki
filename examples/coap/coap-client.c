@@ -63,6 +63,10 @@
 
 #define TOGGLE_INTERVAL 10
 
+
+//REPLACED_BY_ATTACK_CONFIGURATION
+
+
 PROCESS(coap_client, "Coap Client");
 AUTOSTART_PROCESSES(&coap_client);
 

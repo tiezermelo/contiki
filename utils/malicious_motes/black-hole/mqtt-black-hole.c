@@ -42,6 +42,8 @@
 // #include "dev/leds.h"
 // #include "dev/sht25.h"
 #include <string.h>
+#include "sys/node-id.h"
+#include "lib/random.h"
 /*---------------------------------------------------------------------------*/
 /*
  * Publish to a local MQTT broker (e.g. mosquitto) running on the host
@@ -175,6 +177,7 @@ static struct etimer publish_periodic_timer;
 static struct ctimer ct;
 static char *buf_ptr;
 static uint16_t seq_nr_value = 0;
+static uint16_t co2_concentration = 479;
 /*---------------------------------------------------------------------------*/
 /* Parent RSSI functionality */
 static struct uip_icmp6_echo_reply_notification echo_reply_notification;
@@ -306,7 +309,8 @@ mqtt_event(struct mqtt_connection *m, mqtt_event_t event, void *data)
 static int
 construct_pub_topic(void)
 {
-  int len = snprintf(pub_topic, BUFFER_SIZE, "iot-2/evt/%s/fmt/json",
+  // iot-2/evt/%s/fmt/json
+  int len = snprintf(pub_topic, BUFFER_SIZE, "sensors/co2",
                      conf.event_type_id);
 
   /* len < 0: Error. Len >= BUFFER_SIZE: Buffer too small */
@@ -321,7 +325,8 @@ construct_pub_topic(void)
 static int
 construct_sub_topic(void)
 {
-  int len = snprintf(sub_topic, BUFFER_SIZE, "iot-2/cmd/%s/fmt/json",
+  // sensor/cmd/%s/fmt/json
+  int len = snprintf(sub_topic, BUFFER_SIZE, "sensors/co2",
                      conf.cmd_type);
 
   /* len < 0: Error. Len >= BUFFER_SIZE: Buffer too small */
@@ -440,10 +445,10 @@ publish(void)
   len = snprintf(buf_ptr, remaining,
                  "{"
                  "\"d\":{"
-                 "\"myName\":\"%s\","
+                 "\"sensorID\":\"%u\","
                  "\"Seq #\":%d,"
                  "\"Uptime (sec)\":%lu",
-                 BOARD_STRING, seq_nr_value, clock_seconds());
+                 node_id, seq_nr_value, clock_seconds());
 
   if(len < 0 || len >= remaining) {
     printf("Buffer too short. Have %d, need %d + \\0\n", remaining, len);
@@ -468,20 +473,29 @@ publish(void)
   remaining -= len;
   buf_ptr += len;
 
-  /*value = sht25.value(SHT25_VAL_TEMP);*/
-  value = 0;
-  len = snprintf(buf_ptr, remaining, ",\"SHT25 Temp (mC)\":%d", value);
+  // /*value = sht25.value(SHT25_VAL_TEMP);*/
+  // value = 0;
+  // len = snprintf(buf_ptr, remaining, ",\"SHT25 Temp (mC)\":%d", value);
 
-  if(len < 0 || len >= remaining) {
-    printf("Buffer too short. Have %d, need %d + \\0\n", remaining, len);
-    return;
-  }
-  remaining -= len;
-  buf_ptr += len;
+  // if(len < 0 || len >= remaining) {
+  //   printf("Buffer too short. Have %d, need %d + \\0\n", remaining, len);
+  //   return;
+  // }
+  // remaining -= len;
+  // buf_ptr += len;
 
-  /*value = sht25.value(SHT25_VAL_HUM);*/
-  value = 0;
-  len = snprintf(buf_ptr, remaining, ",\"Humidity (RH)\":%d", value);
+  // /*value = sht25.value(SHT25_VAL_HUM);*/
+  // value = 0;
+  // len = snprintf(buf_ptr, remaining, ",\"Humidity (RH)\":%d", value);
+
+  // if(len < 0 || len >= remaining) {
+  //   printf("Buffer too short. Have %d, need %d + \\0\n", remaining, len);
+  //   return;
+  // }
+  // remaining -= len;
+  // buf_ptr += len;
+
+  len = snprintf(buf_ptr, remaining, ",\"CO2 (PPM)\":%u.%u", co2_concentration, rand() % 100);
 
   if(len < 0 || len >= remaining) {
     printf("Buffer too short. Have %d, need %d + \\0\n", remaining, len);

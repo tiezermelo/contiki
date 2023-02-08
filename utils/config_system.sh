@@ -40,6 +40,38 @@ function copy_files_malicious_motes(){
     cp $CONTIKI_PATH/utils/malicious_motes/${attack}/mqtt-${attack}.c $CONTIKI_PATH/examples/mqtt/mqtt-${attack}.c
 }
 
+
+# Version Number Attack Configuration
+function copy_malicious_mote_version-number(){
+    cp $CONTIKI_PATH/examples/mqtt/mqtt-client.c $CONTIKI_PATH/examples/mqtt/mqtt-version-number.c
+    sed -i "s|//REPLACED_BY_ATTACK_CONFIGURATION||g" $CONTIKI_PATH/examples/mqtt/mqtt-version-number.c
+
+    cp $CONTIKI_PATH/examples/coap/coap-client.c $CONTIKI_PATH/examples/coap/coap-version-number.c
+    sed -i "s|//REPLACED_BY_ATTACK_CONFIGURATION||g" $CONTIKI_PATH/examples/coap/coap-version-number.c
+}
+
+
+# Hello Flood Attack Configuration
+function copy_malicious_mote_hello-flood(){
+    cp $CONTIKI_PATH/examples/mqtt/mqtt-client.c $CONTIKI_PATH/examples/mqtt/mqtt-hello-flood.c
+    sed -i "s|//REPLACED_BY_ATTACK_CONFIGURATION|/* Enable hello flood attack*/ \n#define RPL_CONF_DIS_INTERVAL	 	    0 \n#define RPL_CONF_DIS_START_DELAY	  0 \n/* End of attack */|g" $CONTIKI_PATH/examples/mqtt/mqtt-hello-flood.c
+
+    cp $CONTIKI_PATH/examples/coap/coap-client.c $CONTIKI_PATH/examples/coap/coap-hello-flood.c
+    sed -i "s|//REPLACED_BY_ATTACK_CONFIGURATION|/* Enable hello flood attack*/ \n#define RPL_CONF_DIS_INTERVAL	 	    0 \n#define RPL_CONF_DIS_START_DELAY	  0 \n/* End of attack */|g" $CONTIKI_PATH/examples/coap/coap-hello-flood.c
+}
+
+
+# Black Hole Attack Configuration
+function copy_malicious_mote_black-hole(){
+    cp $CONTIKI_PATH/examples/mqtt/mqtt-client.c $CONTIKI_PATH/examples/mqtt/mqtt-black-hole.c
+    sed -i "s|//REPLACED_BY_ATTACK_CONFIGURATION|/* Enable black hole attack  */ \n#define RPL_CONF_MIN_HOPRANKINC 0 \n/* End of attack */|g" $CONTIKI_PATH/examples/mqtt/mqtt-black-hole.c
+
+    cp $CONTIKI_PATH/examples/coap/coap-client.c $CONTIKI_PATH/examples/coap/coap-black-hole.c
+    sed -i "s|//REPLACED_BY_ATTACK_CONFIGURATION|/* Enable black hole attack  */ \n#define RPL_CONF_MIN_HOPRANKINC 0 \n/* End of attack */|g" $CONTIKI_PATH/examples/coap/coap-black-hole.c
+}
+
+
+
 function build_rpl_border_router(){
     cd $CONTIKI_PATH/examples/ipv6/rpl-border-router/
     make TARGET=z1 border-router
@@ -146,7 +178,8 @@ for attack in ${attacks[@]}; do
     copy_files_rpl_$attack;
 
     echo -e "${RED}\nCopy malicious mote files${NC}"
-    copy_files_malicious_motes;
+    # copy_files_malicious_motes;
+    copy_malicious_mote_$attack;
 
     echo -e "${RED}\nBuild malicious motes${NC}"
     build_malicious_motes;
