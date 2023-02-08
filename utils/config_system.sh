@@ -174,7 +174,7 @@ fi
 
 echo -e "${BLUE}\n\nConfiguring master environment ${NC}"
 build_master_environment
-exit;
+
 attacks=("hello-flood" "version-number" "black-hole")
 
 for attack in ${attacks[@]}; do
