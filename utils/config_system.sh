@@ -126,8 +126,8 @@ function build_master_environment(){
     cd $CONTIKI_PATH
     git checkout master
 
-    git config --global user.name $1
-    git config --global user.email $2
+    git config --global user.name "master-thesis"
+    git config --global user.email "master@thesis.com"
 
     echo -e "${RED}\nBackup original RPL files${NC}"
     mkdir -p $CONTIKI_PATH/utils/rpl/original_rpl_files
