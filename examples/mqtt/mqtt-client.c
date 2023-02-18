@@ -121,6 +121,10 @@ static uint8_t state;
 /* Payload length of ICMPv6 echo requests used to measure RSSI with def rt */
 #define ECHO_REQ_PAYLOAD_LEN   20
 /*---------------------------------------------------------------------------*/
+
+//REPLACED_BY_ATTACK_CONFIGURATION
+
+/*---------------------------------------------------------------------------*/
 PROCESS_NAME(mqtt_demo_process);
 AUTOSTART_PROCESSES(&mqtt_demo_process);
 /*---------------------------------------------------------------------------*/
@@ -305,7 +309,7 @@ static int
 construct_pub_topic(void)
 {
   // iot-2/evt/%s/fmt/json
-  int len = snprintf(pub_topic, BUFFER_SIZE, "sensors/co2",
+  int len = snprintf(pub_topic, BUFFER_SIZE, "sensors/evt/%s/fmt/json",
                      conf.event_type_id);
 
   /* len < 0: Error. Len >= BUFFER_SIZE: Buffer too small */
@@ -321,7 +325,7 @@ static int
 construct_sub_topic(void)
 {
   // sensor/cmd/%s/fmt/json
-  int len = snprintf(sub_topic, BUFFER_SIZE, "sensors/co2",
+  int len = snprintf(sub_topic, BUFFER_SIZE, "sensors/cmd/%s/fmt/json",
                      conf.cmd_type);
 
   /* len < 0: Error. Len >= BUFFER_SIZE: Buffer too small */
