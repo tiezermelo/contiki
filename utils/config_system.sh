@@ -199,7 +199,7 @@ for attack in ${attacks[@]}; do
     restore_default_config;
 
     cd $CONTIKI_PATH
-    git add -f examples/coap/coap-${attack}.* examples/mqtt/mqtt-${attack}.* utils/rpl/original_rpl_files
+    git add -f examples/coap/ examples/mqtt/ utils/rpl/original_rpl_files
     git commit -m "Configured $attack attack environment"
 
     echo -e "${YELLOW}\n\nFiles in coap directory: \n"
